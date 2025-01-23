@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'blood_request_screen.dart'; // Import the new screen
+import 'blood_request_screen.dart';
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({super.key});
@@ -16,10 +16,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   // Profile Form Controllers
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController contactController = TextEditingController();
-  
+
   String? selectedBloodGroup;
   bool isDonorActive = false;
 
@@ -48,7 +47,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     if (user != null) {
       try {
         DocumentSnapshot userDoc =
-            await _firestore.collection('users').doc(user.uid).get();
+        await _firestore.collection('users').doc(user.uid).get();
 
         if (userDoc.exists) {
           var userData = userDoc.data() as Map<String, dynamic>;
@@ -198,21 +197,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
                       }
                       return null;
                     },

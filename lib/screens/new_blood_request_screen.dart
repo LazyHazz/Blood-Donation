@@ -21,14 +21,20 @@ class _NewBloodRequestScreenState extends State<NewBloodRequestScreen> {
     donorsFuture = _fetchDonorsWithSameBloodGroup();
   }
 
+  @override
+  void dispose() {
+    // Dispose of the controller to prevent memory leaks
+    super.dispose();
+  }
+
   // Fetch donors with the same blood group
   Future<List<Map<String, dynamic>>> _fetchDonorsWithSameBloodGroup() async {
     bool isConnected = await _checkNetworkConnectivity();
     if (!isConnected) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content:
-                Text('No internet connection. Please check your network.')),
+          content: Text('No internet connection. Please check your network.'),
+        ),
       );
       return []; // Return an empty list if no connectivity
     }
@@ -78,7 +84,7 @@ class _NewBloodRequestScreenState extends State<NewBloodRequestScreen> {
 
   // Check network connectivity
   Future<bool> _checkNetworkConnectivity() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
+    var connectivityResult = await Connectivity().checkConnectivity();
     return connectivityResult != ConnectivityResult.none;
   }
 

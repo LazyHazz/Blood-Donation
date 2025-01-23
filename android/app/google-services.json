@@ -13,7 +13,12 @@
           "package_name": "com.example.blood_donation"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "132095266991-3s7e8mf3com1bhcavq0tujg2a91tpfkk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyABhEcMxZX5JDUdmbm_ezHqb8Md1ywCJCk"
@@ -21,7 +26,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "132095266991-3s7e8mf3com1bhcavq0tujg2a91tpfkk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     },
@@ -32,7 +42,20 @@
           "package_name": "com.example.blooddonation"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "132095266991-0ne0p4oj4jbfdqceev6i1emon7mhl3jh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.blooddonation",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "132095266991-3s7e8mf3com1bhcavq0tujg2a91tpfkk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyABhEcMxZX5JDUdmbm_ezHqb8Md1ywCJCk"
@@ -40,7 +63,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "132095266991-3s7e8mf3com1bhcavq0tujg2a91tpfkk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

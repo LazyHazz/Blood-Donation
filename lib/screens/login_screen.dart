@@ -21,6 +21,10 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState?.validate() ?? false) {
       try {
         // Sign in the user
+        await _auth.signInWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
 
         // Navigate to the home screen after successful login
         Navigator.pushNamed(context, '/home');

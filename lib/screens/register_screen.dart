@@ -11,9 +11,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
-
+  final FocusNode _focusNodeEmail = FocusNode();
+  final FocusNode _focusNodePassword = FocusNode();
+  final FocusNode _focusNodeConfirmPassword = FocusNode();
+  final FocusNode _focusNodeName = FocusNode();
+  final FocusNode _focusNodeAddress = FocusNode();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -22,7 +28,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true; // Password visibility toggle
 
   final List<String> bloodGroups = [
-    'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-',
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'AB+',
+    'AB-',
+    'O+',
+    'O-',
   ];
 
   Future<void> register() async {
@@ -33,7 +46,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       try {
         // Register the user with Firebase Authentication
-        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        UserCredential userCredential =
+            await _auth.createUserWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text,
         );
@@ -54,13 +68,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
           });
 
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Registered successfully! Please check your email to verify your account.')),
+            SnackBar(
+                content: Text(
+                    'Registered successfully! Please check your email to verify your account.')),
           );
 
           // Reset the form after successful registration
           _formKey.currentState?.reset();
           emailController.clear();
           passwordController.clear();
+          confirmPasswordController.clear();
           nameController.clear();
           addressController.clear();
           setState(() {
@@ -73,7 +90,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       } on FirebaseAuthException catch (e) {
         if (e.code == 'email-already-in-use') {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('The email address is already in use. Please use a different email.')),
+            SnackBar(
+                content: Text(
+                    'The email address is already in use. Please use a different email.')),
+          );
+        } else if (e.code == 'weak-password') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('The password provided is too weak.')),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -107,6 +130,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               TextFormField(
                 controller: nameController,
+                focusNode: _focusNodeName,
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) {
+                  _focusNodeEmail.requestFocus();
+                },
                 decoration: InputDecoration(labelText: 'Full Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -117,6 +145,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               TextFormField(
                 controller: emailController,
+                focusNode: _focusNodeEmail,
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) {
+                  _focusNodePassword.requestFocus();
+                },
                 decoration: InputDecoration(labelText: 'Email'),
                 validator: (value) {
                   if (value == null || !value.contains('@')) {
@@ -127,11 +160,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               TextFormField(
                 controller: passwordController,
+                focusNode: _focusNodePassword,
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) {
+                  _focusNodeConfirmPassword.requestFocus();
+                },
                 decoration: InputDecoration(
                   labelText: 'Password',
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                      _obscurePassword
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                     ),
                     onPressed: () {
                       setState(() {
@@ -149,7 +189,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
               ),
               TextFormField(
+                controller: confirmPasswordController,
+                focusNode: _focusNodeConfirmPassword,
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) {
+                  _focusNodeAddress.requestFocus();
+                },
+                decoration: InputDecoration(
+                  labelText: 'Confirm Password',
+                ),
+                obscureText: _obscurePassword,
+                validator: (value) {
+                  if (value == null || value != passwordController.text) {
+                    return 'Passwords do not match';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
                 controller: addressController,
+                focusNode: _focusNodeAddress,
+                textInputAction: TextInputAction.done,
                 decoration: InputDecoration(labelText: 'Address'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -189,7 +249,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               SizedBox(height: 20),
               TextButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/login'); // Navigate to the login screen
+                  Navigator.pushReplacementNamed(
+                      context, '/login'); // Navigate to the login screen
                 },
                 child: Text('Already have an account? Log in here.'),
               ),
